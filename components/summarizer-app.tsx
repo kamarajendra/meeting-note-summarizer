@@ -116,6 +116,38 @@ export default function SummarizerApp() {
         >
           Analyze Notes
         </button>
+        {summary && (
+          <button
+            type="button"
+            onClick={() => {
+              const lines: string[] = ["# Meeting Summary", ""];
+              if (summary.decisions.length > 0) {
+                lines.push("## Decisions", "");
+                summary.decisions.forEach((d) => lines.push(`- ${d.text}`));
+                lines.push("");
+              }
+              if (summary.actionItems.length > 0) {
+                lines.push("## Action Items", "");
+                summary.actionItems.forEach((a) => lines.push(`- ${a.text}${a.owner ? ` (${a.owner})` : ""}`));
+                lines.push("");
+              }
+              if (summary.openQuestions.length > 0) {
+                lines.push("## Open Questions", "");
+                summary.openQuestions.forEach((q) => lines.push(`- ${q.text}`));
+                lines.push("");
+              }
+              if (summary.keyTopics.length > 0) {
+                lines.push("## Key Topics", "");
+                summary.keyTopics.forEach((t) => lines.push(`- ${t}`));
+                lines.push("");
+              }
+              navigator.clipboard.writeText(lines.join("\n"));
+            }}
+            className="rounded-lg border border-stone-300 px-4 py-2.5 text-sm font-medium text-stone-600 transition-colors hover:bg-stone-100"
+          >
+            Copy summary
+          </button>
+        )}
       </div>
 
       {summary && (
